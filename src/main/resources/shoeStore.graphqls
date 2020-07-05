@@ -1,0 +1,18 @@
+schema {
+    query: Query
+}
+
+type Query {
+  searchShoes(queryText: String,category: String): [Shoes]
+}
+
+type Shoes {
+   id: String
+   price: Price
+   pictureLink:String
+   name:String
+}
+type Price {
+   value: Float
+   currency: String
+}
