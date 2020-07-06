@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import store.entities.QueryData;
 import store.entities.Shoes;
 import org.springframework.stereotype.Service;
 import store.utils.SendHttpRequests;
@@ -29,7 +30,7 @@ public class ShoesService {
 
    static final String apiAddress ="https://api.ebay.com/buy/browse/v1/item_summary/search?";
 
-    public List<Shoes> search(String queryText, Integer category,Integer limit, Integer offset){
+    public QueryData<Shoes> search(String queryText, Integer category,Integer limit, Integer offset){
 
         String request = handleSimpleRequestData(queryText, category);
         request =handleLimitAndOffset(limit,offset,request);
@@ -38,7 +39,7 @@ public class ShoesService {
 
 
 
-    public List<Shoes> complexSearch(String queryText, Integer category, Double startPrice, Double endPrice, String color, String brand, Integer limit, Integer offset) {
+    public QueryData<Shoes> complexSearch(String queryText, Integer category, Double startPrice, Double endPrice, String color, String brand, Integer limit, Integer offset) {
         String request = handleSimpleRequestData(queryText, category,color,brand);
         request = handlePriceData(startPrice, endPrice, request);
         request =handleLimitAndOffset(limit,offset,request);
@@ -83,13 +84,13 @@ public class ShoesService {
                 isFirst=false;
             }
             if(color != null){
-                if(isFirst){
+                if(!isFirst){
                     request+=" ";
                 }
                 request+= color;
             }
             if(brand != null){
-                if(isFirst){
+                if(!isFirst){
                     request+=" ";
                 }
                 request+=brand;
@@ -111,15 +112,13 @@ public class ShoesService {
         return request;
     }
 
-
-
     private String handleLimitAndOffset(Integer limit, Integer offset, String request) {
 
         request +=AND_CHARACTER+ "limit="+ Optional.ofNullable(limit).orElse(DEFAULT_LIMIT)+
                 AND_CHARACTER +"offset="+Optional.ofNullable(offset).orElse(STARTING_OFFSET);
         return request;
     }
-    private List<Shoes> getShoesByRequest(String request) {
+    private QueryData<Shoes> getShoesByRequest(String request) {
         ResponseEntity<String> responseEntity = sendHttpRequests.execute(request , HttpMethod.GET, null);
 
         if(responseEntity.getStatusCode().isError()){
@@ -129,14 +128,18 @@ public class ShoesService {
         }
         else{
             JsonObject body = gson.fromJson(responseEntity.getBody(), JsonObject.class);
-            if(body.get("total").getAsInt()==0){
+            int totalCount = body.get("total").getAsInt();
+            if(totalCount==0){
                 return null;
             }else{
                 JsonArray itemsArray = body.get("itemSummaries").getAsJsonArray();
-                return gson.fromJson(itemsArray,new TypeToken<List<Shoes>>(){}.getType());
+                List<Shoes> list = gson.fromJson(itemsArray,new TypeToken<List<Shoes>>(){}.getType());
+                return new QueryData<Shoes>(totalCount,body.get("next").getAsString(),list);
             }
         }
-        // Model the response
-//        return Collections.singletonList(new Shoes("dcd", Price.builder().currency("USD").value(58.3).build(),"ddds","sds"));
+    }
+
+    public QueryData<Shoes> nextPage(String hRef) {
+        return getShoesByRequest(hRef);
     }
 }

@@ -3,11 +3,16 @@ schema {
 }
 
 type Query {
-   searchShoes(queryText: String,category: Int, limit:Int, offset:Int): [Shoes]
-  complexSearch(queryText: String, category: Int,  startPrice: Float,  endPrice: Float, color: String, brand: String, limit:Int, offset:Int): [Shoes]
+   searchShoes(queryText: String,category: Int, limit:Int, offset:Int): QueryData
+  complexSearch(queryText: String, category: Int,  startPrice: Float,  endPrice: Float, color: String, brand: String, limit:Int, offset:Int): QueryData
+    nextPage(hRef:String):QueryData
+}
+type QueryData{
+  data:[Shoes]
+  totalCount:Int
+  nextPage:String
 
 }
-
 type Shoes {
    id: String
    price: Price
