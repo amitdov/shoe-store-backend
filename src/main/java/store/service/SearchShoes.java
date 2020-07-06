@@ -13,7 +13,6 @@ import store.entities.Shoes;
 import org.springframework.stereotype.Service;
 import store.utils.SendHttpRequests;
 
-import java.net.http.HttpClient;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,9 +25,6 @@ public class SearchShoes {
             .create();
 
    static final String apiAddress ="https://api.ebay.com/buy/browse/v1/item_summary/search?q=";
-    private final HttpClient httpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
-            .build();
 
     public List<Shoes> search(String queryText, String category){
         if(queryText ==null){
@@ -42,9 +38,13 @@ public class SearchShoes {
             System.out.println(responseEntity.getStatusCode().getReasonPhrase());
         }
         else{
-            JsonArray body = gson.fromJson(responseEntity.getBody(), JsonObject.class).get("itemSummaries").getAsJsonArray();
-            List<Shoes> shoes = gson.fromJson(body,new TypeToken<List<Shoes>>(){}.getType());
-            return shoes;
+            JsonObject body = gson.fromJson(responseEntity.getBody(), JsonObject.class);
+            if(body.get("total").getAsInt()==0){
+                return null;
+            }else{
+                JsonArray itemsArray = body.get("itemSummaries").getAsJsonArray();
+                return gson.fromJson(itemsArray,new TypeToken<List<Shoes>>(){}.getType());
+            }
         }
         // Model the response
         return Collections.singletonList(new Shoes("dcd", Price.builder().currency("USD").value(58.3).build(),"ddds","sds"));
