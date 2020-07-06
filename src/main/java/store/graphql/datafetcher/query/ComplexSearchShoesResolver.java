@@ -23,8 +23,8 @@ public class ComplexSearchShoesResolver implements DataFetcher<List<Shoes>> {
         Double endPrice = environment.getArgument("endPrice");
         String color = environment.getArgument("color");
         String brand = environment.getArgument("brand");
-        Integer startIndex = environment.getArgument("startIndex");
+        Integer limit = environment.getArgument("limit");
         Integer offset = environment.getArgument("offset");
-        return shoesServiceService.complexSearch(queryText,category,startPrice,endPrice,color,brand,startIndex,offset);
+        return shoesServiceService.complexSearch(queryText,category,startPrice,endPrice,color,brand,limit,offset);
     }
 }

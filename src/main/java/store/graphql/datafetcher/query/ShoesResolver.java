@@ -19,8 +19,8 @@ public class ShoesResolver implements DataFetcher<List<Shoes>> {
     public List<Shoes> get(DataFetchingEnvironment environment) throws Exception {
         String queryText = environment.getArgument("queryText");
         Integer category = environment.getArgument("category");
-        Integer startIndex = environment.getArgument("startIndex");
+        Integer limit = environment.getArgument("limit");
         Integer offset = environment.getArgument("offset");
-        return shoesServiceService.search(queryText,category,startIndex,offset);
+        return shoesServiceService.search(queryText,category,limit,offset);
     }
 }
