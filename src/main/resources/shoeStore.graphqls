@@ -3,7 +3,9 @@ schema {
 }
 
 type Query {
-  searchShoes(queryText: String,category: Int): [Shoes]
+   searchShoes(queryText: String,category: Int,startIndex:Int, offset:Int): [Shoes]
+  complexSearch(queryText: String, category: Int,  startPrice: Float,  endPrice: Float, color: String, brand: String,startIndex:Int, offset:Int): [Shoes]
+
 }
 
 type Shoes {

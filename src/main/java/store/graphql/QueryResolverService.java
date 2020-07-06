@@ -1,5 +1,6 @@
 package store.graphql;
 
+import store.graphql.datafetcher.query.ComplexSearchShoesResolver;
 import store.graphql.datafetcher.query.ShoesResolver;
 import graphql.schema.DataFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,13 @@ public class QueryResolverService {
     @Autowired
     ShoesResolver shoesResolver;
 
+    @Autowired
+    ComplexSearchShoesResolver complexSearchShoesResolver;
+
     Map<String, DataFetcher> initQueryDataFetchers() {
         Map<String, DataFetcher> queryDataFetchers = new HashMap<>();
         queryDataFetchers.put("searchShoes", shoesResolver);
+        queryDataFetchers.put("complexSearch", complexSearchShoesResolver);
         return queryDataFetchers;
     }
 }
