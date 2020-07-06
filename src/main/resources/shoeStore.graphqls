@@ -3,7 +3,7 @@ schema {
 }
 
 type Query {
-  searchShoes(queryText: String,category: String): [Shoes]
+  searchShoes(queryText: String,category: Int): [Shoes]
 }
 
 type Shoes {

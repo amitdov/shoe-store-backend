@@ -24,14 +24,19 @@ public class SearchShoes {
             .registerTypeAdapter(Shoes.class, new ShoesDeserializer())
             .create();
 
-   static final String apiAddress ="https://api.ebay.com/buy/browse/v1/item_summary/search?q=";
+   static final String apiAddress ="https://api.ebay.com/buy/browse/v1/item_summary/search?";
 
-    public List<Shoes> search(String queryText, String category){
-        if(queryText ==null){
-            queryText ="harry potter";
+    public List<Shoes> search(String queryText, Integer category){
+
+        if(category == null){
+            category =3034;
         }
-
-        ResponseEntity<String> responseEntity = sendHttpRequests.execute(apiAddress+ queryText, HttpMethod.GET, null);
+        String request = apiAddress;
+        if(queryText !=null){
+            request += "q=" +queryText+"&";
+        }
+        request+="category_ids=" +category;
+        ResponseEntity<String> responseEntity = sendHttpRequests.execute(request , HttpMethod.GET, null);
 
         if(responseEntity.getStatusCode().isError()){
             // print response body
