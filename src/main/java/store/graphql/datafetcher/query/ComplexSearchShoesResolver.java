@@ -8,7 +8,6 @@ import store.entities.QueryData;
 import store.entities.Shoes;
 import store.service.ShoesService;
 
-import java.util.List;
 
 @Controller
 public class ComplexSearchShoesResolver implements DataFetcher<QueryData<Shoes>> {
@@ -17,7 +16,7 @@ public class ComplexSearchShoesResolver implements DataFetcher<QueryData<Shoes>>
     private ShoesService shoesServiceService;
 
     @Override
-    public QueryData<Shoes> get(DataFetchingEnvironment environment) throws Exception {
+    public QueryData<Shoes> get(DataFetchingEnvironment environment)  {
         String queryText = environment.getArgument("queryText");
         Integer category = environment.getArgument("category");
         Double startPrice = environment.getArgument("startPrice");

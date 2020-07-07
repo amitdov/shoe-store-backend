@@ -1,14 +1,12 @@
 package store.graphql.datafetcher.query;
 
-import store.entities.QueryData;
-import store.entities.Shoes;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import store.entities.QueryData;
+import store.entities.Shoes;
 import store.service.ShoesService;
-
-import java.util.List;
 
 @Controller
 public class ShoesResolver implements DataFetcher<QueryData<Shoes>> {
@@ -17,7 +15,7 @@ public class ShoesResolver implements DataFetcher<QueryData<Shoes>> {
     private ShoesService shoesServiceService;
 
     @Override
-    public QueryData<Shoes> get(DataFetchingEnvironment environment) throws Exception {
+    public QueryData<Shoes> get(DataFetchingEnvironment environment) {
         String queryText = environment.getArgument("queryText");
         Integer category = environment.getArgument("category");
         Integer limit = environment.getArgument("limit");

@@ -15,6 +15,8 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import store.entities.QueryData;
+import store.entities.Shoes;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -29,8 +31,6 @@ public class GraphQLService {
 
     private static final String GRAPHQL_URL = "shoeStore.graphqls";
 
-//    @Autowired
-//    ResourceLoader resourceLoader;
 
     @Bean
     public GraphQL graphQL() {
