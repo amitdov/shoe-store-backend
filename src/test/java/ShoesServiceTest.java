@@ -3,7 +3,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class ShoesServiceTest {
     @InjectMocks
     ShoesService shoesService;
 
-    public static final String TOTAL_COUNT = "223417";
+    public static final Integer TOTAL_COUNT = 223417;
     static final String EBAY_RESPONSE_STRING = "{\n" +
             "    \"href\": \"https://api.ebay.com/buy/browse/v1/item_summary/search?q=+Red+Nike&limit=50&offset=0\",\n" +
             "    \"total\": " + TOTAL_COUNT + ",\n" +
@@ -80,6 +79,9 @@ public class ShoesServiceTest {
 
 
     @Test
+    /**
+     * Check that the parsing is working
+     */
     public void simpleSearch(){
         when(sendHttpRequests.execute("https://api.ebay.com/buy/browse/v1/item_summary/search?category_ids=3034&q=amit&limit=16&offset=0", HttpMethod.GET,null))
                 .thenReturn(ResponseEntity.of(Optional.of(EBAY_RESPONSE_STRING)));
