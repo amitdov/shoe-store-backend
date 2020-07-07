@@ -32,6 +32,7 @@ public class ShoesService {
     public static final String TOTAL_FIELD_NAME = "total";
     public static final String ITEMS_FIELD_NAME = "itemSummaries";
     public static final String NEXT_PAGE_FIELD_NAME = "next";
+    public static final int DEFAULT_CATEGORY = 3034;
 
     @Autowired
     private SendHttpRequests<JsonObject> sendHttpRequests;
@@ -118,7 +119,7 @@ public class ShoesService {
 
     private String handleCategory(Integer category) {
         if (category == null) {
-            category = 3034;
+            category = DEFAULT_CATEGORY;
         }
         return apiAddress + CATEGORY_IDS_FILTER + category;
     }
